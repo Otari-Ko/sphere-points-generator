@@ -1,4 +1,4 @@
-#pragma onse
+#pragma onсe
 
 #include <Eigen/Dense>
 #include <vector>
