@@ -12,13 +12,15 @@ time_step = 1 / num_directions
 visc = 15.0
 
 init_directions = random_directions(num_directions)
-#directions = init_directions
+directions = init_directions
 
-directions = equilib_method(init_directions, time_step, visc, tol = 0.0005)
+# directions = equilib_method(init_directions, time_step, visc, tol = 0.0005)
 points = np.concatenate([directions,-directions])
 
 vcels = SphericalVoronoi(points)
 vcels.sort_vertices_of_regions()
+vcels_areas = vcels.calculate_areas()
 
-print_vcels_mayavi(vcels)
+
+print_vcels_mayavi(vcels, vcels_areas)
 
