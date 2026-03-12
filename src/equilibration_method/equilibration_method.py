@@ -1,6 +1,5 @@
 import numpy as np
 import matplotlib.pyplot as plt
-import plotly.express as px
 
 from .utils import *
 
@@ -17,9 +16,10 @@ def equilib_method(init_directions, dt, visc, tol = 0.0005, animate=True):
     ax.set_ylim(-1.2, 1.2)
     ax.set_zlim(-1.2, 1.2)
     
-    error = tol + 1
+    iter = 1
+    max_displ = tol + 1
 
-    while (error >= tol):
+    while (max_displ >= tol):
         tangent_forces_0 = total_tangent_forces(directions_0)
 
         directions_1 = directions_0 + dt * velocities_0 #trial step
@@ -31,15 +31,17 @@ def equilib_method(init_directions, dt, visc, tol = 0.0005, animate=True):
             directions_1[i] = directions_1[i] / norm
             velocities_1[i] = tangent_projection_on_sphere(directions_1[i], velocities_1[i])
 
-        row_norms = np.linalg.norm(velocities_1 * dt, axis = 1)
-        error = np.max(row_norms)
-        print(error)
-        velocities_0 = velocities_1.copy()
-        directions_0 = directions_1.copy()
-
+        displs = np.linalg.norm(velocities_1 * dt, axis = 1)
+        max_displ = np.max(displs)
+        
+        print(f'iteration: {iter}')
+        print(f'maximum displacement: {max_displ} \n')
         print_fame(ax, directions_1)
 
-    plt.show()
+        velocities_0 = velocities_1.copy()
+        directions_0 = directions_1.copy()
+        iter += 1
+
     return directions_1
 
 
